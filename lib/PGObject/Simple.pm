@@ -193,7 +193,7 @@ sub call_dbmethod {
     for my $arg (@{$info->{args}}){
         $arg->{name} =~ s/^in_//;
         my $db_arg = $self->{$arg->{name}} if ref $self;
-        if ($args{args}->{$arg->{name}}){
+        if (exists $args{args}->{$arg->{name}}){
             $db_arg = $args{args}->{$arg->{name}};
         }
         if (eval {$db_arg->can('to_db')}){

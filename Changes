@@ -1,9 +1,12 @@
 Revision history for PGObject-Simple
 
-1.8     2016-11-20
+1.9     2016-11-20
         Fix issue #5: Don't call $value->to_db() [PGObject already does]
         Fix issue #6: Don't special-case BYTEA arguments
         Fix author tests
+
+1.8     2014-08-21
+        1. Made use of catalog-lookups memoization-safe.
 
 1.7     2014-08-19
         1. Solved a number of issues regarding overriding defaults for 

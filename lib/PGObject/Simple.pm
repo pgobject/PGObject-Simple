@@ -12,11 +12,11 @@ PGObject::Simple - Minimalist stored procedure mapper based on LedgerSMB's DBObj
 
 =head1 VERSION
 
-Version 1.8
+Version 1.9
 
 =cut
 
-our $VERSION = '1.8';
+our $VERSION = '1.9';
 
 
 =head1 SYNOPSIS
@@ -196,8 +196,6 @@ sub call_dbmethod {
         $argname =~ s/^in_//;
         $db_arg = $self->{$argname} if ref $self;
         $db_arg = $args{args}->{$argname} if exists $args{args}->{$argname};
-        $db_arg = $db_arg->to_db if eval {$db_arg->can('to_db')};
-        $db_arg = { type => 'bytea', value => $db_arg} if $_->{type} eq 'bytea';
         $db_arg;
     } @{$info->{args}};
     $args{args} = $arglist;
@@ -336,7 +334,7 @@ L<http://search.cpan.org/dist/PGObject-Simple/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2013-2014 Chris Travers.
+Copyright 2013-2016 Chris Travers.
 
 Redistribution and use in source and compiled forms with or without 
 modification, are permitted provided that the following conditions are met:

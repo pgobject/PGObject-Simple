@@ -12,11 +12,11 @@ PGObject::Simple - Minimalist stored procedure mapper based on LedgerSMB's DBObj
 
 =head1 VERSION
 
-Version 1.9
+Version 1.10
 
 =cut
 
-our $VERSION = '1.9';
+our $VERSION = '1.10';
 
 
 =head1 SYNOPSIS

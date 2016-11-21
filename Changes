@@ -1,7 +1,7 @@
 Revision history for PGObject-Simple
 
 
-1.10    2016-11-21
+1.10.1  2016-11-21
         Fix minimum dependency on PGObject
 
 1.9     2016-11-20

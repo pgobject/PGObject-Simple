@@ -1,6 +1,9 @@
 Revision history for PGObject-Simple
 
 
+2.0.0   2016-11-21
+        Release version 2.0.0 in order to get out of the 1.9 vs 1.10 mess
+
 1.91    2016-11-21
         CPAN won't accept 1.10.1 as it's lower than 1.9... Renumbering
 

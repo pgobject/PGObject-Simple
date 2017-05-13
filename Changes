@@ -1,6 +1,6 @@
 Revision history for PGObject-Simple
 
-2.001	2017-05-19
+3.0	2017-05-19
 	Removed support for Perl 5.6 and 5.8
 	Code cleanup
 	Now provide exports for code re-use in rolls and adaptors

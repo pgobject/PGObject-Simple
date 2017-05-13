@@ -1,5 +1,11 @@
 Revision history for PGObject-Simple
 
+2.0	2017-05-19
+	Removed support for Perl 5.6 and 5.8
+	Code cleanup
+	Now provide exports for code re-use in rolls and adaptors
+	Give precedence to functions over hash elements in object mappings.
+
 1.9     2016-11-20
         Fix issue #5: Don't call $value->to_db() [PGObject already does]
         Fix issue #6: Don't special-case BYTEA arguments

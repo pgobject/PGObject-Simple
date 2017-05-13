@@ -1,6 +1,7 @@
 use PGObject::Simple;
 use Test::More;
 use DBI;
+use Data::Dumper;
 
 my %hash = (
    foo => 'foo',
@@ -42,14 +43,14 @@ SKIP: {
       funcname => 'foobar',
       args => ['text', 'text2', '5', '30']
    );
-   is ($ref->{foobar}, 159, 'Correct value returned, call_procedure');
+   is ($ref->{foobar}, 159, 'Correct value returned, call_procedure') or diag Dumper($ref);
 
    ($ref) = PGObject::Simple->call_procedure(
       dbh => $dbh,
       funcname => 'foobar',
       args => ['text', 'text2', '5', '30']
    );
-   is ($ref->{foobar}, 159, 'Correct value returned, call_procedure, package invocation');
+   is ($ref->{foobar}, 159, 'Correct value returned, call_procedure, package invocation') or diag Dumper($ref);
 
 
    ($ref) = $obj->call_procedure(
@@ -58,19 +59,19 @@ SKIP: {
       args => ['text1', 'text2', '5', '30']
    );
 
-   is ($ref->{foobar}, 160, 'Correct value returned, call_procedure w/schema');
+   is ($ref->{foobar}, 160, 'Correct value returned, call_procedure w/schema') or diag Dumper($ref);
 
    ($ref) = $obj->call_dbmethod(
       funcname => 'foobar'
    );
 
-   is ($ref->{foobar}, $answer, 'Correct value returned, call_dbmethod');
+   is ($ref->{foobar}, $answer, 'Correct value returned, call_dbmethod') or diag Dumper($ref);
    ($ref) = PGObject::Simple->call_dbmethod(
       funcname => 'foobar',
           args => \%hash,
            dbh => $dbh,
    );
-   is ($ref->{foobar}, $answer, 'Correct value returned, call_dbmethod');
+   is ($ref->{foobar}, $answer, 'Correct value returned, call_dbmethodi with hash and no ref') or diag Dumper($ref);
        
 
    ($ref) = $obj->call_dbmethod(
@@ -78,19 +79,19 @@ SKIP: {
       args     => {id => 4}
    );
 
-   is ($ref->{foobar}, 14, 'Correct value returned, call_dbmethod w/args');
+   is ($ref->{foobar}, 14, 'Correct value returned, call_dbmethod w/args') or diag Dumper($ref);
    $obj->_set_funcprefix('foo');
    ($ref) = ($ref) = $obj->call_dbmethod(
       funcname => 'bar',
       args     => {id => 4}
    );
-   is ($ref->{foobar}, 14, 'Correct value returned, call_dbmethod w/args/prefix');
+   is ($ref->{foobar}, 14, 'Correct value returned, call_dbmethod w/args/prefix') or diag Dumper($ref);
    ($ref) = ($ref) = $obj->call_dbmethod(
       funcname => 'oobar',
       args     => {id => 4},
     funcprefix => 'f'
    );
-   is ($ref->{foobar}, 14, 'Correct value returned, call_dbmethod w/exp. pre.');
+   is ($ref->{foobar}, 14, 'Correct value returned, call_dbmethod w/exp. pre.') or diag Dumper($ref);
 
    $obj->_set_funcschema('test');
    $obj->_set_funcprefix('');
@@ -98,7 +99,7 @@ SKIP: {
       funcname => 'foobar'
    );
 
-   is ($ref->{foobar}, $answer * 2, 'Correct value returned, call_dbmethod');
+   is ($ref->{foobar}, $answer * 2, 'Correct value returned, call_dbmethod') or diag Dumper($ref);
 }
 
 $dbh->disconnect if $dbh;

@@ -253,7 +253,13 @@ sub _self_to_arg { # refactored from map call, purely internal
     my $db_arg;
     $argname =~ s/^in_//;
     local $@;
-    eval { $db_arg = $self->can($argname)->($self) } if ref $self and $argname;
+    if (ref $self and $argname){
+        if (eval { $self->can($argname) } ) {
+            eval { $db_arg = $self->can($argname)->($self) };
+        } else {
+            $db_arg = $self->{$argname};
+        }
+    }
     $db_arg = $args->{args}->{$argname} if exists $args->{args}->{$argname};
     $db_arg = $db_arg->to_db if eval {$db_arg->can('to_db')};
     $db_arg = { type => 'bytea', value => $db_arg} if $_->{type} eq 'bytea';

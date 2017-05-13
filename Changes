@@ -8,6 +8,7 @@ Revision history for PGObject-Simple
 	Added getters and setters for dbh
 	Added association interface
 	Added support for package-level reader/factories for param defaults
+	Added support for object accessors for param defaults
 
 2.0.0   2016-11-21
         Release version 2.0.0 in order to get out of the 1.9 vs 1.10 mess

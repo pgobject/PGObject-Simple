@@ -248,6 +248,26 @@ better data encapsulation.
 
 =cut
 
+sub _arg_defaults {
+    my ($self, %args) = @_;
+    if (eval { $self->can('dbh') } and ref $self){
+        $args{dbh} ||= $self->dbh;
+	$args{funcprefix} //= $self->funcprefix if $self->can('funcprefix');
+	$args{funcschema} //= $self->funcschema if $self->can('funcschema');
+
+        $args{funcprefix} //= $self->{_func_prefix};
+        $args{funcschema} //= $self->{_func_schema};
+    } elsif (!ref $self){
+        local $@;
+	# see if we have package-level reader/factories
+        $args{dbh} ||= "$self"->dbh; # if eval {"$self"->dbh};
+        $args{funcschema} //= "$self"->func_schema if eval {"$self"->func_schema};
+        $args{funcprefix} //= "$self"->func_prefix if eval {"$self"->func_prefix};
+    }
+    $args{funcprefix} ||= '';
+    return %args
+}
+
 sub _self_to_arg { # refactored from map call, purely internal
     my ($self, $args, $argname) = @_;
     my $db_arg;
@@ -271,19 +291,7 @@ sub call_dbmethod {
     my ($self) = shift @_;
     my %args = @_;
     croak 'No function name provided' unless $args{funcname};
-    if (eval { $self->isa(__PACKAGE__) } and ref $self){
-        $args{dbh} = $self->dbh if $self->dbh and !$args{dbh};
-
-        $args{funcprefix} //= $self->{_func_prefix};
-        $args{funcschema} //= $self->{_func_schema};
-    } elsif (!ref $self){
-        local $@;
-	# see if we have package-level reader/factories
-        $args{dbh} //= "$self"->dbh if eval {"$self"->dbh};
-        $args{funcschema} //= "$self"->func_schema if eval {"$self"->func_schema};
-        $args{funcprefix} //= "$self"->func_prefix if eval {"$self"->func_prefix};
-    }
-    $args{funcprefix} ||= '';
+    %args = _arg_defaults($self, %args);
     my $info = PGObject->function_info(%args);
 
     my $arglist = [];
@@ -311,23 +319,8 @@ simply returns the single first row returned.
 =cut
 
 sub call_procedure {
-    my ($self) = shift @_;
-    my %args = @_;
-    if (eval { $self->isa(__PACKAGE__) } and ref $self ){
-        $args{funcprefix} //= $self->{_func_prefix};
-        $args{funcschema} //= $self->{_func_schema};
-        $args{registry} //= $self->{_registry};
-
-        $args{dbh} = $self->dbh if $self->dbh and !$args{dbh};
-    } elsif (!ref $self){
-        local $@;
-	# see if we have package-level reader/factories
-        $args{dbh} //= "$self"->dbh if eval {"$self"->dbh};
-        $args{funcschema} //= "$self"->func_schema if eval {"$self"->func_schema};
-        $args{funcprefix} //= "$self"->func_prefix if eval {"$self"->func_prefix};
-    }
-    $args{funcprefix} ||= '';
-
+    my ($self, %args) = @_;
+    %args = _arg_defaults($self, %args);
     croak 'No DB handle provided' unless $args{dbh};
     my @rows = PGObject->call_procedure(%args);
     return shift @rows unless wantarray;

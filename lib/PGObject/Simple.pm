@@ -306,7 +306,7 @@ sub call_procedure {
         $args{funcschema} //= $self->{_func_schema};
         $args{registry} //= $self->{_registry};
 
-        $args{dbh} = $self->{_DBH} if $self->{_DBH} and !$args{dbh};
+        $args{dbh} = $self->dbh if $self->dbh and !$args{dbh};
     }
     $args{funcprefix} ||= '';
 

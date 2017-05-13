@@ -174,7 +174,7 @@ Returns the database handle for the object.
 
 sub dbh {
     my ($self) = @_;
-    return $self->{_dbh};
+    return ($self->{_dbh} or $self->{_DBH});
 }
 
 =head2 associate($pgobject)
@@ -272,7 +272,7 @@ sub call_dbmethod {
     my %args = @_;
     croak 'No function name provided' unless $args{funcname};
     if (eval { $self->isa(__PACKAGE__) } and ref $self){
-        $args{dbh} = $self->{_dbh} if $self->{_dbh} and !$args{dbh};
+        $args{dbh} = $self->dbh if $self->dbh and !$args{dbh};
 
         $args{funcprefix} //= $self->{_func_prefix};
         $args{funcschema} //= $self->{_func_schema};

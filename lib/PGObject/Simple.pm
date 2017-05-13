@@ -152,6 +152,7 @@ sub new {
     $ref->_set_funcprefix($ref->{_funcprefix});
     $ref->_set_funcschema($ref->{_funcschema});
     $ref->_set_registry($ref->{_registry});
+    $ref->associate($self) if ref $self;
     return $ref;
 }
 

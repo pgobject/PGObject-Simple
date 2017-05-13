@@ -5,6 +5,8 @@ Revision history for PGObject-Simple
 	Code cleanup
 	Now provide exports for code re-use in rolls and adaptors
 	Give precedence to functions over hash elements in object mappings.
+	Added getters and setters for dbh
+	Added association interface
 
 1.9     2016-11-20
         Fix issue #5: Don't call $value->to_db() [PGObject already does]

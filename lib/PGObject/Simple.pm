@@ -276,6 +276,12 @@ sub call_dbmethod {
 
         $args{funcprefix} //= $self->{_func_prefix};
         $args{funcschema} //= $self->{_func_schema};
+    } elsif (!ref $self){
+        local $@;
+	# see if we have package-level reader/factories
+        $args{dbh} //= "$self"->dbh if eval {"$self"->dbh};
+        $args{funcschema} //= "$self"->func_schema if eval {"$self"->func_schema};
+        $args{funcprefix} //= "$self"->func_prefix if eval {"$self"->func_prefix};
     }
     $args{funcprefix} ||= '';
     my $info = PGObject->function_info(%args);
@@ -313,6 +319,12 @@ sub call_procedure {
         $args{registry} //= $self->{_registry};
 
         $args{dbh} = $self->dbh if $self->dbh and !$args{dbh};
+    } elsif (!ref $self){
+        local $@;
+	# see if we have package-level reader/factories
+        $args{dbh} //= "$self"->dbh if eval {"$self"->dbh};
+        $args{funcschema} //= "$self"->func_schema if eval {"$self"->func_schema};
+        $args{funcprefix} //= "$self"->func_prefix if eval {"$self"->func_prefix};
     }
     $args{funcprefix} ||= '';
 

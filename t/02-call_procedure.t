@@ -1,3 +1,21 @@
+package dbtest;
+use parent 'PGObject::Simple';
+sub dbh {
+    my ($self) = @_;
+    return $self->SUPER::dbh(@_) if ref $self;
+    return $main::dbh;
+}
+
+sub func_prefix {
+    return '';
+}
+
+sub func_schema {
+    return 'public';
+}
+
+package main;
+
 use PGObject::Simple;
 use Test::More;
 use DBI;
@@ -11,12 +29,12 @@ my %hash = (
 );
 
 plan skip_all => 'Not set up for db tests' unless $ENV{DB_TESTING};
-plan tests => 9;
+plan tests => 11;
 my $dbh1 = DBI->connect('dbi:Pg:dbname=postgres', 'postgres');
 $dbh1->do('CREATE DATABASE pgobject_test_db') if $dbh1;
 
 
-my $dbh = DBI->connect('dbi:Pg:dbname=pgobject_test_db', 'postgres');
+our $dbh = DBI->connect('dbi:Pg:dbname=pgobject_test_db', 'postgres');
 $dbh->do('
    CREATE FUNCTION public.foobar (in_foo text, in_bar text, in_baz int, in_id int)
       RETURNS int language sql as $$
@@ -52,6 +70,11 @@ SKIP: {
    );
    is ($ref->{foobar}, 159, 'Correct value returned, call_procedure, package invocation') or diag Dumper($ref);
 
+   ($ref) = dbtest->call_procedure(funcname => 'foobar', 
+	   args => ['text', 'text2', '5', '30']
+   );
+   is ($ref->{foobar}, 159, 'Correct value returned, package invocation with factories') or diag Dumper($ref);
+
 
    ($ref) = $obj->call_procedure(
       funcname => 'foobar',
@@ -73,6 +96,11 @@ SKIP: {
    );
    is ($ref->{foobar}, $answer, 'Correct value returned, call_dbmethodi with hash and no ref') or diag Dumper($ref);
        
+   ($ref) = dbtest->call_dbmethod(funcname => 'foobar', 
+	   args => \%hash
+   );
+   is ($ref->{foobar}, $answer, 'Correct value returned, package invocation with factories and dbmethod') or diag Dumper($ref);
+
 
    ($ref) = $obj->call_dbmethod(
       funcname => 'foobar',
@@ -100,6 +128,8 @@ SKIP: {
    );
 
    is ($ref->{foobar}, $answer * 2, 'Correct value returned, call_dbmethod') or diag Dumper($ref);
+   $obh = dbtest->new();
+
 }
 
 $dbh->disconnect if $dbh;

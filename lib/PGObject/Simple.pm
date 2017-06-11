@@ -13,11 +13,11 @@ PGObject::Simple - Minimalist stored procedure mapper based on LedgerSMB's DBObj
 
 =head1 VERSION
 
-Version 3
+Version 3.0.2
 
 =cut
 
-our $VERSION = 3;
+our $VERSION = 3.000002;
 
 =head1 SYNOPSIS
 
@@ -251,21 +251,22 @@ better data encapsulation.
 
 sub _arg_defaults {
     my ($self, %args) = @_;
-    if (eval { $self->can('dbh') } and ref $self){
-        $args{dbh} ||= $self->dbh;
-	$args{funcprefix} //= $self->funcprefix if $self->can('funcprefix');
-	$args{funcschema} //= $self->funcschema if $self->can('funcschema');
-
+    local $@;
+    if (ref $self) {
+        $args{dbh} ||= eval { $self->dbh } ;
+        $args{funcprefix} //= eval { $self->funcprefix } ;
+        $args{funcschema} //= eval { $self->funcschema } ;
         $args{funcprefix} //= $self->{_func_prefix};
         $args{funcschema} //= $self->{_func_schema};
-    } elsif (!ref $self){
-        local $@;
+        $args{funcprefix} //= eval {$self->_get_prefix() };
+    } else { 
 	# see if we have package-level reader/factories
         $args{dbh} ||= "$self"->dbh; # if eval {"$self"->dbh};
-        $args{funcschema} //= "$self"->func_schema if eval {"$self"->func_schema};
-        $args{funcprefix} //= "$self"->func_prefix if eval {"$self"->func_prefix};
+        $args{funcschema} //= "$self"->funcschema if eval {"$self"->funcschema};
+        $args{funcprefix} //= "$self"->funcprefix if eval {"$self"->funcprefix};
     }
-    $args{funcprefix} ||= '';
+    $args{funcprefix} //= '';
+
     return %args
 }
 
@@ -283,7 +284,6 @@ sub _self_to_arg { # refactored from map call, purely internal
     }
     $db_arg = $args->{args}->{$argname} if exists $args->{args}->{$argname};
     $db_arg = $db_arg->to_db if eval {$db_arg->can('to_db')};
-    $db_arg = { type => 'bytea', value => $db_arg} if $_->{type} eq 'bytea';
 
     return $db_arg;
 }

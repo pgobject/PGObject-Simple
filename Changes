@@ -1,6 +1,6 @@
 Revision history for PGObject-Simple
 
-3.0.2	2016-06-10
+3.0.2	2017-06-10
 	Fixed bug introduced during refactoring for byteas
 
 3.0.1	2017-05-20

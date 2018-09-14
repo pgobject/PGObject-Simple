@@ -29,7 +29,7 @@ To call a stored procedure with enumerated arguments.
 
   my @results = $obj->call_procedure(
       funcname     => $funcname,
-      funcschema   => $funcname,
+      funcschema   => $funcschema,
       args         => [$arg1, $arg2, $arg3],
   );
 
@@ -37,7 +37,7 @@ You can add something like a running total as well:
 
   my @results = $obj->call_procedure(
       funcname      => $funcname,
-      funcschema    => $funcname,
+      funcschema    => $funcschema,
       args          => [$arg1, $arg2, $arg3],
       running_funcs => [{agg => 'sum(amount)', alias => 'total'}],
   );
@@ -47,7 +47,7 @@ typically done when mapping object properties in to stored procedure arguments.
 
   my @results = $obj->call_dbmethod(
       funcname      => $funcname,
-      funcschema    => $funcname,
+      funcschema    => $funcschema,
       running_funcs => [{agg => 'sum(amount)', alias => 'total'}],
   );
 
@@ -354,7 +354,7 @@ property name starts with 'in_' properly one must also prefix it).
 
 An example of a simple stored procedure might be:
 
-   CREATE OR REPLACE FUNCTION customer_get(in_id int) returns customer 
+   CREATE OR REPLACE FUNCTION customer_get(in_id int)
    RETURNS setof customer language sql as $$
 
    select * from customer where id = $1;

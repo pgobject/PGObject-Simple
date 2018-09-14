@@ -332,9 +332,9 @@ sub call_procedure {
 
 Unlike PGObject, which is only loosely tied to the functionality in question
 and presumes that relevant information will be passed over a functional 
-interface, PGObject is a specific framework for object-oriented coding in Perl.
-It can therefore be used alone or with other modules to provide quite a bit of
-functionality.
+interface, PGObject::Simple is a specific framework for object-oriented coding
+in Perl. It can therefore be used alone or with other modules to provide quite
+a bit of functionality.
 
 A PGObject::Simple object is a blessed hashref with no gettors or setters.  This
 is thus ideal for cases where you are starting and just need some quick mappings

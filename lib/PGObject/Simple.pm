@@ -293,6 +293,7 @@ sub call_dbmethod {
     my %args = @_;
     croak 'No function name provided' unless $args{funcname};
     %args = _arg_defaults($self, %args);
+    croak 'No DB handle provided' unless $args{dbh};
     my $info = PGObject->function_info(%args);
 
     my $arglist = [];

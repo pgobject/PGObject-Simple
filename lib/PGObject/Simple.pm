@@ -3,9 +3,13 @@ package PGObject::Simple;
 use 5.010;
 use strict;
 use warnings;
-use Carp;
-use PGObject;
 use parent 'Exporter';
+
+use Carp::Clan qr/^PGObject\b/;
+use Log::Any qw($log);
+
+use PGObject;
+
 
 =head1 NAME
 
@@ -13,11 +17,11 @@ PGObject::Simple - Minimalist stored procedure mapper based on LedgerSMB's DBObj
 
 =head1 VERSION
 
-Version 3.0.2
+Version 3.1.0
 
 =cut
 
-our $VERSION = 3.000002;
+our $VERSION = '3.1.0';
 
 =head1 SYNOPSIS
 
@@ -90,10 +94,10 @@ Below are the export tags listed including the leading ':' used to invoke them.
 =over
 
 =item :mapper
-	    call_dbmethod, call_procedure, and set_dbh
+            call_dbmethod, call_procedure, and set_dbh
 
 =item :full
-	    All methods that can be exported at once.
+            All methods that can be exported at once.
 
 =back
 
@@ -260,7 +264,7 @@ sub _arg_defaults {
         $args{funcschema} //= $self->{_func_schema};
         $args{funcprefix} //= eval {$self->_get_prefix() };
     } else { 
-	# see if we have package-level reader/factories
+        # see if we have package-level reader/factories
         $args{dbh} ||= "$self"->dbh; # if eval {"$self"->dbh};
         $args{funcschema} //= "$self"->funcschema if eval {"$self"->funcschema};
         $args{funcprefix} //= "$self"->funcprefix if eval {"$self"->funcprefix};
@@ -291,9 +295,11 @@ sub _self_to_arg { # refactored from map call, purely internal
 sub call_dbmethod {
     my ($self) = shift @_;
     my %args = @_;
-    croak 'No function name provided' unless $args{funcname};
+    croak $log->error( 'No function name provided' )
+        unless $args{funcname};
     %args = _arg_defaults($self, %args);
-    croak 'No DB handle provided' unless $args{dbh};
+    croak $log->error( 'No DB handle provided' )
+        unless $args{dbh};
     my $info = PGObject->function_info(%args);
 
     my $arglist = [];
@@ -323,7 +329,8 @@ simply returns the single first row returned.
 sub call_procedure {
     my ($self, %args) = @_;
     %args = _arg_defaults($self, %args);
-    croak 'No DB handle provided' unless $args{dbh};
+    croak $log->error( 'No DB handle provided' )
+        unless $args{dbh};
     my @rows = PGObject->call_procedure(%args);
     return shift @rows unless wantarray;
     return @rows;

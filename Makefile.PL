@@ -13,6 +13,8 @@ WriteMakefile(
       : ()),
     PL_FILES            => {},
     PREREQ_PM => {
+        'Carp::Clan' => '0',
+        'Log::Any'   => '0',
         'PGObject'   => '1.403.2',
     },
     BUILD_REQUIRES => {

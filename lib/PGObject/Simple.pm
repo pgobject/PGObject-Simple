@@ -411,19 +411,11 @@ You can also look for information at:
 
 =item * RT: CPAN's request tracker (report bugs here)
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PGObject-Simple>
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=PGObject-Simple>
 
-=item * AnnoCPAN: Annotated CPAN documentation
+=item * MetaCPAN
 
-L<http://annocpan.org/dist/PGObject-Simple>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/PGObject-Simple>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/PGObject-Simple/>
+L<https://metacpan.org/dist/PGObject-Simple>
 
 =back
 
@@ -433,7 +425,8 @@ L<http://search.cpan.org/dist/PGObject-Simple/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2013-2017 Chris Travers.
+  COPYRIGHT (C) 2013-2014 Chris Travers
+  COPYRIGHT (C) 2014-2021 The LedgerSMB Core Team
 
 Redistribution and use in source and compiled forms with or without 
 modification, are permitted provided that the following conditions are met:

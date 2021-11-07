@@ -1,6 +1,7 @@
 Revision history for PGObject-Simple
 
-3.1.0   to-be-released
+3.1.0   2021-11-07
+      * Add repository meta data
       * MetaCPAN parseable bulleted list in Changes
       * Add logging of errors
       * Improve error reporting by switching to Carp::Clan from Carp

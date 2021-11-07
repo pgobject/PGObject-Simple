@@ -17,9 +17,19 @@ WriteMakefile(
         'Log::Any'   => '0',
         'PGObject'   => '1.403.2',
     },
-    BUILD_REQUIRES => {
+    TEST_REQUIRES => {
         'Test::More' => 0,
         'Data::Dumper' => 0,
+    },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+         resources => {
+             repository => {
+                 type => 'git',
+                 url  => 'https://github.com/ledgersmb/PGObject-Simple.git',
+                 web  => 'https://github.com/ledgersmb/PGObject-Simple',
+             },
+         },
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'PGObject-Simple-*' },
